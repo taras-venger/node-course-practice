@@ -492,13 +492,13 @@
         },
         "role": {
           "name": "role",
-          "type": "int",
+          "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "default": "1",
-          "mappedType": "integer"
+          "default": "'USER'",
+          "mappedType": "string"
         }
       },
       "name": "user_site",

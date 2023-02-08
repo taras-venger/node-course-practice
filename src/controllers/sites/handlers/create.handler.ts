@@ -4,7 +4,7 @@ import { instanceToPlain } from 'class-transformer';
 import { SiteBody } from '../../../contracts/site.body';
 import { Site } from '../../../entities/site.entity';
 import { Monitor } from '../../../entities/monitor.entity';
-import { UserSite } from '../../../entities/userSite.entity';
+import { Role, UserSite } from '../../../entities/userSite.entity';
 import { Airspace } from '../../../entities/airspace.entity';
 
 export const createSite = async (body: SiteBody, userId: string) => {
@@ -41,7 +41,7 @@ export const createSite = async (body: SiteBody, userId: string) => {
   const userSite = em.create(UserSite, {
     user: userId,
     site: site.id,
-    role: 0,
+    role: Role.Admin,
   });
   await em.persistAndFlush(userSite);
 

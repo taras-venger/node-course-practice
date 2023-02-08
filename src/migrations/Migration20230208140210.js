@@ -2,7 +2,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 const { Migration } = require('@mikro-orm/migrations');
 
-class Migration20230206132012 extends Migration {
+class Migration20230208140210 extends Migration {
 
   async up() {
     this.addSql('create table "gateway" ("id" bigserial primary key, "name" varchar(255) not null);');
@@ -16,11 +16,11 @@ class Migration20230206132012 extends Migration {
 
     this.addSql('create table "airspace" ("id" uuid not null, "name" varchar(255) not null, "site_id" uuid not null, "batch_id" uuid null, constraint "airspace_pkey" primary key ("id"));');
 
-    this.addSql('create table "monitor" ("id" bigserial primary key, "gateway_id" bigint null, "airspace_id" uuid not null, "name" varchar(255) not null);');
+    this.addSql('create table "monitor" ("id" bigserial primary key, "gateway_id" bigint null, "airspace_id" uuid null, "name" varchar(255) null);');
 
     this.addSql('create table "monitor_data" ("monitor_id" bigint not null, "date" timestamp not null, "temperature" float not null, "humidity" float not null, constraint "monitor_data_pkey" primary key ("monitor_id", "date"));');
 
-    this.addSql('create table "user_site" ("user_id" uuid not null, "site_id" uuid not null, "role" int not null default 1, constraint "user_site_pkey" primary key ("user_id", "site_id"));');
+    this.addSql('create table "user_site" ("user_id" uuid not null, "site_id" uuid not null, "role" varchar(255) not null default \'USER\', constraint "user_site_pkey" primary key ("user_id", "site_id"));');
 
     this.addSql('alter table "batch" add constraint "batch_user_id_foreign" foreign key ("user_id") references "user" ("id") on update cascade;');
 
@@ -28,7 +28,7 @@ class Migration20230206132012 extends Migration {
     this.addSql('alter table "airspace" add constraint "airspace_batch_id_foreign" foreign key ("batch_id") references "batch" ("id") on update cascade on delete set null;');
 
     this.addSql('alter table "monitor" add constraint "monitor_gateway_id_foreign" foreign key ("gateway_id") references "gateway" ("id") on update cascade on delete set null;');
-    this.addSql('alter table "monitor" add constraint "monitor_airspace_id_foreign" foreign key ("airspace_id") references "airspace" ("id") on update cascade;');
+    this.addSql('alter table "monitor" add constraint "monitor_airspace_id_foreign" foreign key ("airspace_id") references "airspace" ("id") on update cascade on delete set null;');
 
     this.addSql('alter table "monitor_data" add constraint "monitor_data_monitor_id_foreign" foreign key ("monitor_id") references "monitor" ("id") on update cascade;');
 
@@ -71,4 +71,4 @@ class Migration20230206132012 extends Migration {
   }
 
 }
-exports.Migration20230206132012 = Migration20230206132012;
+exports.Migration20230208140210 = Migration20230208140210;
