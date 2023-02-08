@@ -1,10 +1,14 @@
 import { Nested } from '@panenco/papi';
 import { Exclude, Expose } from 'class-transformer';
-import { IsString, IsLatitude, IsLongitude } from 'class-validator';
+import { IsString, IsLatitude, IsLongitude, IsOptional } from 'class-validator';
 import { AirspaceBody } from './airspace.body';
 
 @Exclude()
 export class SiteBody {
+  @Expose()
+  @IsOptional()
+  public id?: string;
+
   @Expose()
   @IsString()
   public name: string;

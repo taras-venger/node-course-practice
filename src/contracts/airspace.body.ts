@@ -6,6 +6,10 @@ import { MonitorBody } from './monitor.body';
 @Exclude()
 export class AirspaceBody {
   @Expose()
+  @IsOptional()
+  public id?: string;
+
+  @Expose()
   @IsString()
   public name: string;
 

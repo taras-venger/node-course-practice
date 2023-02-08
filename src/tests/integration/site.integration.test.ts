@@ -123,12 +123,19 @@ export const siteTests = describe('Site Integration Tests', () => {
       .set('x-auth', token)
       .expect(StatusCode.ok);
 
-    // const updatedStructure = getStructure;
+    const { airspaces, ...siteInfo } = getStructure;
+    siteInfo.name = 'Updated Site Name';
+    airspaces.forEach(item => {
+      item.monitors.forEach(item => {
+        item.id = Number(item.id);
+        item.name = `${item.name} updated`;
+      });
+    });
 
-    // const { body: updatedSite } = await request
-    //   .patch(`/api/sites/${getResponse.id}`)
-    //   .set('x-auth', token)
-    //   .send(updatedStructure)
-    //   .expect(StatusCode.ok);
+    const { body: updatedSite } = await request
+      .patch(`/api/sites/${getResponse.id}`)
+      .set('x-auth', token)
+      .send({ airspaces, ...siteInfo })
+      .expect(StatusCode.ok);
   });
 });

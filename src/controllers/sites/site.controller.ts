@@ -40,10 +40,10 @@ export class SiteController {
     return getStructure(id);
   }
 
-  // @Patch('/:id')
-  // @Authorized()
-  // @Representer(SiteView, StatusCode.ok)
-  // async patch(@Param('id') id: string, @Body() body: SiteBody) {
-  //   return patch(id, body);
-  // }
+  @Patch('/:id')
+  @Authorized()
+  @Representer(SiteView, StatusCode.ok)
+  async patch(@Param('id') id: string, @Body() body: SiteBody) {
+    return patch(id, body);
+  }
 }
