@@ -86,41 +86,49 @@ export const siteTests = describe('Site Integration Tests', () => {
               },
             ],
           },
-          { name: 'Airspace 3' },
+          { name: 'Airspace 3', monitors: [] },
         ],
       })
       .expect(StatusCode.created);
 
-    // expect(postResponse.name).equal('Test Site');
+    expect(postResponse.name).equal('Test Site');
 
-    // // Get created site;
-    // const { body: getResponse } = await request
-    //   .get(`/api/sites/${postResponse.id}`)
+    // Get created site;
+    const { body: getResponse } = await request
+      .get(`/api/sites/${postResponse.id}`)
+      .set('x-auth', token)
+      .expect(StatusCode.ok);
+
+    const { body: getAirspacesResponse } = await request
+      .get(`/api/sites/${getResponse.id}/airspaces`)
+      .set('x-auth', token)
+      .expect(StatusCode.ok);
+
+    expect(getAirspacesResponse.length === 3);
+
+    const { body: createBatchResponse } = await request
+      .post(`/api/batch`)
+      .set('x-auth', token)
+      .send({
+        name: 'Test Batch',
+        airspaces: getAirspacesResponse.map(
+          (airspace: AirspaceView) => airspace.id
+        ),
+      })
+      .expect(StatusCode.created);
+
+    // Get the site structure;
+    const { body: getStructure } = await request
+      .get(`/api/sites/${getResponse.id}/structure`)
+      .set('x-auth', token)
+      .expect(StatusCode.ok);
+
+    // const updatedStructure = getStructure;
+
+    // const { body: updatedSite } = await request
+    //   .patch(`/api/sites/${getResponse.id}`)
     //   .set('x-auth', token)
-    //   .expect(StatusCode.ok);
-
-    // const { body: getAirspacesResponse } = await request
-    //   .get(`/api/sites/${getResponse.id}/airspaces`)
-    //   .set('x-auth', token)
-    //   .expect(StatusCode.ok);
-
-    // expect(getAirspacesResponse.length === 3);
-
-    // const { body: createBatchResponse } = await request
-    //   .post(`/api/batch`)
-    //   .set('x-auth', token)
-    //   .send({
-    //     name: 'Test Batch',
-    //     airspaces: getAirspacesResponse.map(
-    //       (airspace: AirspaceView) => airspace.id
-    //     ),
-    //   })
-    //   .expect(StatusCode.created);
-
-    // // Get the site structure;
-    // const { body: getStructure } = await request
-    //   .get(`/api/sites/${getResponse.id}/structure`)
-    //   .set('x-auth', token)
+    //   .send(updatedStructure)
     //   .expect(StatusCode.ok);
   });
 });

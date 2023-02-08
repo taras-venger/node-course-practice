@@ -21,18 +21,20 @@ export const createSite = async (body: SiteBody, userId: string) => {
       const airspace = em.create(Airspace, { site: site.id, ...rest });
       await em.persistAndFlush(airspace);
 
-      // await Promise.all(
-      //   monitors?.map(
-      //     async item =>
-      //       await em.nativeUpdate(
-      //         Monitor,
-      //         {
-      //           $and: [{ id: item.id }, { airspace: null }],
-      //         },
-      //         { name: item.name, airspace: airspace.id }
-      //       )
-      //   )
-      // );
+      if (monitors) {
+        await Promise.all(
+          monitors.map(
+            async item =>
+              await em.nativeUpdate(
+                Monitor,
+                {
+                  $and: [{ id: item.id }, { airspace: null }],
+                },
+                { name: item.name, airspace: airspace.id }
+              )
+          )
+        );
+      }
     })
   );
 

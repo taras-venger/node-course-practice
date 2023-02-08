@@ -12,8 +12,9 @@ import { Body, Representer, StatusCode } from '@panenco/papi';
 import { createSite } from './handlers/create.handler';
 import { SiteBody } from '../../contracts/site.body';
 import { SiteView } from '../../contracts/site.view';
-import { get, getStructure } from './handlers/get.handler';
+import { getSite, getStructure } from './handlers/get.handler';
 import { patch } from './handlers/patch.handler';
+import { SiteStructureView } from '../../contracts/siteStructure.view';
 
 @JsonController('/sites')
 export class SiteController {
@@ -28,13 +29,13 @@ export class SiteController {
   @Get('/:id')
   @Authorized()
   @Representer(SiteView, StatusCode.ok)
-  async get(@Param('id') id: string) {
-    return get(id);
+  async getSite(@Param('id') id: string) {
+    return getSite(id);
   }
 
   @Get('/:id/structure')
   @Authorized()
-  @Representer(SiteView, StatusCode.ok)
+  @Representer(SiteStructureView, StatusCode.ok)
   async getStructure(@Param('id') id: string) {
     return getStructure(id);
   }

@@ -1,7 +1,7 @@
 import { RequestContext } from '@mikro-orm/core';
 import { Site } from '../../../entities/site.entity';
 
-export const get = async (id: string) => {
+export const getSite = async (id: string) => {
   const em = RequestContext.getEntityManager();
   const site = await em.findOneOrFail(Site, { id });
   em.flush();
@@ -15,6 +15,5 @@ export const getStructure = async (id: string) => {
     { id },
     { populate: ['airspaces', 'airspaces.monitors'] }
   );
-  console.log('getStructure: ', site);
   return site;
 };
