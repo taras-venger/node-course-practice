@@ -33,8 +33,7 @@ export class App {
     this.host.use(express.json());
 
     this.host.use((req, __, next: NextFunction) => {
-      (req as any).em = this.orm.em.fork();
-      RequestContext.create((req as any).em, next);
+      RequestContext.create(this.orm.em, next);
     });
 
     this.initializeControllers([

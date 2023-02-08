@@ -1,11 +1,11 @@
 import { createAccessToken, Unauthorized } from '@panenco/papi';
-import { RequestContext } from '@mikro-orm/core';
+import { getEm } from '../../../tests/helpers/getEm';
 
 import { User } from '../../../entities/user.entity';
 import { LoginBody } from '../../../contracts/login.body';
 
 export const login = async (body: LoginBody) => {
-  const user = await RequestContext.getEntityManager().findOne(User, {
+  const user = await getEm().findOne(User, {
     email: body.email,
   });
 

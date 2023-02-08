@@ -1,4 +1,4 @@
-import { RequestContext } from '@mikro-orm/core';
+import { getEm } from '../../../tests/helpers/getEm';
 import { instanceToPlain } from 'class-transformer';
 
 import { SiteBody } from '../../../contracts/site.body';
@@ -8,7 +8,7 @@ import { Role, UserSite } from '../../../entities/userSite.entity';
 import { Airspace } from '../../../entities/airspace.entity';
 
 export const createSite = async (body: SiteBody, userId: string) => {
-  const em = RequestContext.getEntityManager();
+  const em = getEm();
 
   const { airspaces, ...rest } = body;
 

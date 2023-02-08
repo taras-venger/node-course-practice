@@ -6,8 +6,8 @@ import { before, beforeEach, describe, it } from 'mocha';
 import supertest from 'supertest';
 
 import { App } from '../../app';
-
 import { UserBody } from '../../contracts/user.body';
+import { RequestContextManager } from '../helpers/getEm';
 
 describe('Integration tests', () => {
   describe('User Tests', () => {
@@ -19,6 +19,7 @@ describe('Integration tests', () => {
       await app.createConnection();
       orm = app.orm;
       request = supertest(app.host);
+      RequestContextManager.setEm(orm.em.fork());
     });
 
     beforeEach(async () => {

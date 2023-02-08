@@ -1,15 +1,15 @@
-import { RequestContext } from '@mikro-orm/core';
+import { getEm } from '../../../tests/helpers/getEm';
 import { Site } from '../../../entities/site.entity';
 
 export const getSite = async (id: string) => {
-  const em = RequestContext.getEntityManager();
+  const em = getEm();
   const site = await em.findOneOrFail(Site, { id });
   em.flush();
   return site;
 };
 
 export const getStructure = async (id: string) => {
-  const em = RequestContext.getEntityManager();
+  const em = getEm();
   const site = await em.findOneOrFail(
     Site,
     { id },

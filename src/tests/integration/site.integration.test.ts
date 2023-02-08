@@ -9,6 +9,7 @@ import { App } from '../../app';
 import { AirspaceView } from '../../contracts/airspace.view';
 
 import { UserBody } from '../../contracts/user.body';
+import { RequestContextManager } from '../helpers/getEm';
 
 export const siteTests = describe('Site Integration Tests', () => {
   let request: supertest.SuperTest<supertest.Test>;
@@ -19,6 +20,7 @@ export const siteTests = describe('Site Integration Tests', () => {
     await app.createConnection();
     orm = app.orm;
     request = supertest(app.host);
+    RequestContextManager.setEm(orm.em.fork());
   });
 
   beforeEach(async () => {

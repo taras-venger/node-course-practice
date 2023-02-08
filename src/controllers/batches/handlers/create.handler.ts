@@ -1,11 +1,11 @@
-import { RequestContext } from '@mikro-orm/core';
+import { getEm } from '../../../tests/helpers/getEm';
 
 import { BatchBody } from '../../../contracts/batch.body';
 import { Batch } from '../../../entities/batch.entity';
 import { Airspace } from '../../../entities/airspace.entity';
 
 export const createBatch = async (user: string, body: BatchBody) => {
-  const em = RequestContext.getEntityManager();
+  const em = getEm();
   // check if airspace is available
   const available = await em.find(Airspace, { batch: null });
   if (!available) return;
