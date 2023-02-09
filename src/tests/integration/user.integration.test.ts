@@ -19,12 +19,12 @@ describe('Integration tests', () => {
       await app.createConnection();
       orm = app.orm;
       request = supertest(app.host);
-      RequestContextManager.setEm(orm.em.fork());
     });
 
     beforeEach(async () => {
       await orm.em.execute(`DROP SCHEMA public CASCADE; CREATE SCHEMA public;`);
       await orm.getMigrator().up();
+      RequestContextManager.setEm(orm.em.fork());
     });
 
     it('should CRUD users', async () => {

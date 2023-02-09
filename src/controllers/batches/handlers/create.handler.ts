@@ -15,6 +15,7 @@ export const createBatch = async (user: string, body: BatchBody) => {
   );
 
   const batch = em.create(Batch, { ...body, airspaces, user });
-  em.persistAndFlush(batch);
+
+  await em.persistAndFlush(batch);
   return batch;
 };

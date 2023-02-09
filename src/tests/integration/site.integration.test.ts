@@ -6,10 +6,11 @@ import { before, beforeEach, describe, it } from 'mocha';
 import supertest from 'supertest';
 
 import { App } from '../../app';
+import { AirspaceBody } from '../../contracts/airspace.body';
 import { AirspaceView } from '../../contracts/airspace.view';
 
 import { UserBody } from '../../contracts/user.body';
-import { RequestContextManager } from '../helpers/getEm';
+import { getEm, RequestContextManager } from '../helpers/getEm';
 
 export const siteTests = describe('Site Integration Tests', () => {
   let request: supertest.SuperTest<supertest.Test>;
@@ -20,7 +21,6 @@ export const siteTests = describe('Site Integration Tests', () => {
     await app.createConnection();
     orm = app.orm;
     request = supertest(app.host);
-    RequestContextManager.setEm(orm.em.fork());
   });
 
   beforeEach(async () => {
@@ -29,6 +29,7 @@ export const siteTests = describe('Site Integration Tests', () => {
     await orm.em
       .execute(`INSERT INTO gateway("id", "name") VALUES(1, 'Gateway 1');
     INSERT INTO monitor("id", "gateway_id") VALUES(1, 1), (2, 1), (3, 1), (4, 1), (5, 1)`);
+    RequestContextManager.setEm(orm.em.fork());
   });
 
   let siteId: string;
@@ -108,6 +109,7 @@ export const siteTests = describe('Site Integration Tests', () => {
 
     expect(getAirspacesResponse.length === 3);
 
+    getEm().clear();
     const { body: createBatchResponse } = await request
       .post(`/api/batch`)
       .set('x-auth', token)
@@ -119,6 +121,7 @@ export const siteTests = describe('Site Integration Tests', () => {
       })
       .expect(StatusCode.created);
 
+    getEm().clear();
     // Get the site structure;
     const { body: getStructure } = await request
       .get(`/api/sites/${getResponse.id}/structure`)
@@ -127,10 +130,10 @@ export const siteTests = describe('Site Integration Tests', () => {
 
     const { airspaces, ...siteInfo } = getStructure;
     siteInfo.name = 'Updated Site Name';
-    airspaces.forEach(item => {
+    airspaces.forEach((item: AirspaceBody) => {
+      if (item.name === 'Airspace 1') item.name = 'Airspace One';
       item.monitors.forEach(item => {
-        item.id = Number(item.id);
-        item.name = `${item.name} updated`;
+        if (item.id === 1) item.name = `${item.name} Updated`;
       });
     });
 

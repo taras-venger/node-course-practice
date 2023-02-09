@@ -1,10 +1,11 @@
+import { Numeric } from '@panenco/papi';
 import { Exclude, Expose } from 'class-transformer';
-import { IsString, IsNumber } from 'class-validator';
+import { IsString } from 'class-validator';
 
 @Exclude()
 export class MonitorView {
   @Expose()
-  @IsNumber()
+  @Numeric()
   public id: number;
 
   @Expose()
