@@ -1,7 +1,6 @@
 import { Nested } from '@panenco/papi';
 import { Exclude, Expose } from 'class-transformer';
 import { IsLatitude, IsLongitude, IsString } from 'class-validator';
-import { AirspaceBody } from './airspace.body';
 import { AirspaceView } from './airspace.view';
 
 @Exclude()
